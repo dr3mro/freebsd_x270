@@ -1,0 +1,12 @@
+/* Example userChrome.css file */
+/* https://github.com/MrOtherGuy/firefox-csshacks */
+/* Import your desired components first */
+
+@import url(../firefox-css/chrome/hide_tabs_with_one_tab.css);
+@import url(../firefox-css/chrome/tabs_on_bottom.css);
+@import url(../firefox-css/chrome/compact_proton.css);
+@import url(../firefox-css/chrome/reload_button_in_urlbar.css);
+@import url(../firefox-css/chrome/theme_toolbars.css);
+@import url(../firefox-css/chrome/minimal_popup_scrollbars.css);
+@import url(../firefox-css/chrome/button_effect_icon_glow.css);
+@import url(../firefox-css/chrome/tab_animated_active_border.css);
