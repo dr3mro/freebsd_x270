@@ -1,0 +1,27 @@
+[xfdesktop-version-4.10.3+-rcfile_format]
+4.10.3+=true
+
+[SDXC]
+row=0
+col=0
+
+[Basic data partition]
+row=1
+col=0
+
+[88d75910-d11b-40cb-8d48-91a3012e40ad]
+row=2
+col=0
+
+[Trash]
+row=3
+col=0
+
+[/]
+row=4
+col=0
+
+[/home/amr]
+row=5
+col=0
+

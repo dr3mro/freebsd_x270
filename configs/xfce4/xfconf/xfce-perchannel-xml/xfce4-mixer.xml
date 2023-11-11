@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<channel name="xfce4-mixer" version="1.0">
+  <property name="sound-card" type="string" value="RealtekALC298Analog20HP20"/>
+  <property name="sound-cards" type="empty">
+    <property name="RealtekALC298Analog20HP20" type="array">
+      <value type="string" value="Vol  "/>
+      <value type="string" value="Pcm  "/>
+      <value type="string" value="Spkr "/>
+      <value type="string" value="Mic  "/>
+      <value type="string" value="Mix  "/>
+      <value type="string" value="Rec  "/>
+      <value type="string" value="IGain"/>
+      <value type="string" value="OGain"/>
+    </property>
+    <property name="IntelKabyLakeHDMIDP8ch" type="array">
+      <value type="string" value="Pcm  "/>
+    </property>
+    <property name="RealtekALC298InternalAnalogMic" type="array">
+    </property>
+  </property>
+  <property name="window-height" type="int" value="793"/>
+  <property name="window-width" type="int" value="631"/>
+</channel>
