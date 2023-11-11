@@ -1,0 +1,31 @@
+Good news! It's working again.
+Well, here it goes, whenever I restarted the system the and run
+$ sudo hccontrol -n ubt0hci read_encryption_mode
+Encryption mode: Disabled [00]
+$ sudo hccontrol -n ubt0hci read_authentication_enable
+Authentication Enable: Disabled [0]
+
+so found out that it loses the state of this values.
+Enabled the state back to 1
+$ sudo hccontrol -n ubt0hci write_encryption_mode 1
+$ sudo hccontrol -n ubt0hci write_authentication_enable 1
+
+then because I was already able to pair it before with
+$ sudo bluetooth-config scan
+
+I just had to
+$ sudo hccontrol -n ubt0hci create_connection f4:b6:88:55:f0:7f
+$ sudo virtual_oss -T /dev/sndstat -C 2 -c 2 -r 48000 -b 16 -s 20ms -P /dev/bluetooth/PLT_Focus -R /dev/null -d dsp
+hw.snd.basename_clone: 1 -> 0
+backend_bt: PSM=0x19
+
+and it connected, but there are no devices listed in the sound plugin
+I did
+$ pacmd unload-module module-oss
+$ pacmd load-module module-oss
+$ pacmd load-module module-detect
+
+and it got displayed as /dev/sdp , ugly name uh?
+
+The sound is working fine but from time to time it chops for few seconds and goes back to normal.
+So now what I need to find out yet is how to persist those flags and how to make module-oss to auto detect when it gets connected.
