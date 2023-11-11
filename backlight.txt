@@ -1,0 +1,58 @@
+Adjusting acpi_video brightness increments on FreeBSD
+
+On FreeBSD systems using Intel integrated graphics, intel-backlight allows the brightness to be set in nice increments using the incr and decr arguments. Alternatively, the acpi_video kernel module can also control brightness, but changes it by one-percent increments for each press of the brightness up/down Fn keys. My goal was to configure acpi_video to follow the behaviour of intel-backlight.
+
+On my ThinkPad T480 (FreeBSD 12.1-RELEASE), I had previously used acpi_ibm and devd to call intel-backlight when pressing the corresponding Fn keys, without loading acpi_video. Downsides of this approach were that brightness would go to 100% when plugging in the AC adapter, resuming from suspend, or waking the screen from dpms sleep in X11. Alternatively, simply loading the acpi_video module would fix these issues, but brightness control was very slow because of the small adjustment increments.
+
+The source code for intel-backlight shows the increments used by the tool. I created a simple shell script to set the display brightness according to these levels. If called with “1” as the argument, brightness will be increased; if called with “0″ as the argument, it will be decreased:
+
+#!/bin/sh
+# /usr/local/bin/acpi_brightness_control.sh
+CURRENT_LEVEL=$(/sbin/sysctl -n hw.acpi.video.lcd0.brightness)
+UP="$1"
+
+if [ "$UP" == 1 ]; then
+ for i in 1 2 4 6 9 12 16 20 25 30 36 43 51 60 70 80 90 100; do
+  if [ "$CURRENT_LEVEL" -lt "$i" ]; then
+   /sbin/sysctl "hw.acpi.video.lcd0.brightness=$i"
+   exit
+  fi
+ done
+fi
+
+if [ "$UP" == 0 ]; then
+ for i in 100 90 80 70 60 51 43 36 30 25 20 16 12 9 6 4 2 1; do
+  if [ "$CURRENT_LEVEL" -gt "$i" ]; then
+   /sbin/sysctl "hw.acpi.video.lcd0.brightness=$i"
+   exit
+  fi
+ done
+fi
+
+I load acpi_ibm and acpi_video in /boot/loader.conf. On my machine, the brightness Fn keys give event codes 0x10 and 0x11 (can be seen using sudo cat /var/run/devd.pipe). To handle these keys with devd, I set dev.acpi_ibm.0.handlerevents=0x10\ 0x11 in /etc/sysctl.conf.
+
+To handle the brightness keys, I create /etc/devd/acpi_brightness.conf:
+
+# /etc/devd/acpi_brightness.conf
+notify 20 {
+ match "system" "ACPI";
+ match "subsystem" "IBM";
+ match "notify" "0x10";
+ action "/usr/local/bin/acpi_brightness_control.sh 1";
+};
+notify 20 {
+ match "system" "ACPI";
+ match "subsystem" "IBM";
+ match "notify" "0x11";
+ action "/usr/local/bin/acpi_brightness_control.sh 0";
+};
+
+Again, the specific match criteria necessary for the keys on a different machine can be observed by pressing the keys while watching the output of sudo cat /var/run/devd.pipe.
+
+Finally, restart devd (sudo service devd restart) to apply the new rule.
+
+Note also that the default brightness on battery or line power can be set using the hw.acpi.video.lcd0.economy and hw.acpi.video.lcd0.fullpower sysctl variables.
+
+This approach provides all the advantages of intel-backlight using only built-in kernel modules.
+
+

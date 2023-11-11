@@ -1,0 +1,39 @@
+#!/bin/sh
+
+if [ $# != 1 ]
+then
+  echo "You need to give me the effeciency scale from 0 to 100."
+  echo "0  : Best performance."
+  echo "100: Best battery life."
+  echo "current value is :"  $(sysctl dev.hwpstate_intel.0.epp | cut -f2 -d':' ) 
+  exit
+fi
+
+if ! [ $(echo $1 | grep -E '^[0-9]+$') ] 
+then
+   echo "Error: Not a valid number."
+   echo "       effeciency scale must be a number in the range of 0 - 100 " 
+   exit
+fi
+
+if  [ $1 -gt 100 ]   
+then
+  echo "Error : effeciency scale is out of range."
+  echo "        effeciency scale must be a number in the range of 0 - 100 "
+  exit
+fi
+
+Ncores=$(sysctl kern.smp.cores | cut -f2 -d':')                                                                                                               
+NThrds=$(sysctl kern.smp.threads_per_core | cut -f2 -d':')
+
+MAX_CPU_UNITS=$((Ncores*NThrds-1))
+
+for c in $(seq 0 $MAX_CPU_UNITS)
+do
+  sudo sysctl dev.hwpstate_intel.$c.epp=$1
+done
+
+
+
+# Copyright 2023 Dr Amr Osman, Consultant of cardiology
+# BSD 3 Clause 

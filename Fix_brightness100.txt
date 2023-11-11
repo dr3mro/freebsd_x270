@@ -1,0 +1,16 @@
+edit file
+
+/usr/ports/graphics/drm-515-kmod/work/drm-kmod-drm_v5.15.118_2/drivers/gpu/drm/i915/display/intel_opregion.c
+
+static u32 asle_set_backlight(struct drm_i915_private *dev_priv, u32 bclp)
+{
+	struct intel_connector *connector;
+	struct drm_connector_list_iter conn_iter;
+	struct opregion_asle *asle = dev_priv->opregion.asle;
+	struct drm_device *dev = &dev_priv->drm;
+
+	drm_dbg(&dev_priv->drm, "bclp = 0x%08x\n", bclp);
+
+#ifdef __FreeBSD__
+	return 0;
+#endif

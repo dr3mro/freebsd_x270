@@ -1,0 +1,4 @@
+pacmd unload-module module-oss
+pacmd unload-module module-detect
+pacmd load-module module-oss
+pacmd load-module module-detect
