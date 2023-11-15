@@ -1,0 +1,23 @@
+# Device	Mountpoint	FStype	Options	Dump	Pass#
+/dev/ada1p4	/		ufs	rw	1	1
+/dev/ada1p2	/boot/efi		msdosfs	rw	2	2
+# Added by auto-admin from /usr/local/sbin/auto-add-fdesc-mount
+fdesc		/dev/fd			fdescfs	rw		0	0
+# End auto-admin addition
+# Added by auto-admin from desktop-installer
+proc			/proc		procfs	rw		0	0
+# End auto-admin addition
+# Added by auto-admin from /usr/local/sbin/auto-install-linux_base
+linprocfs	/compat/linux/proc	linprocfs	rw	0	0
+# End auto-admin addition
+# Added by auto-admin from /usr/local/sbin/auto-install-linux_base
+tmpfs		/compat/linux/dev/shm	tmpfs	rw,mode=1777	0	0
+# End auto-admin addition
+# Added by auto-admin from /usr/local/sbin/auto-install-linux_base
+linsysfs	/compat/linux/sys	linsysfs	rw	0	0
+# End auto-admin addition
+
+## md0 will be assigned by system, use any unused device name (run 'mdconfig -lv' to get list of attached memory device names)
+md0	none		swap	sw,file=/usr/swap,late		0	0
+tmpfs   /tmp    tmpfs   rw,nosuid,noexec,mode=01777        0       0
+tmpfs   /var/tmp    tmpfs   rw,nosuid,noexec,mode=01777        0       0
